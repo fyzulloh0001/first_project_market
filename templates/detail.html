@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+   
+  {% comment %} {% if user.is_authenticated %}
+    
+  
+  {{ post.title }} <br>
+  <img src="{{ post.ImageUrl }}" alt=""> <br>
+  
+  <p>like </p>{{ like }}
+  <p>dislike</p> {{ dislike }}
+  
+  <a href="{% url 'update' post.id %}"> update post </a> <br>
+  
+  <a href="{% url 'delete' post.id %}"> delete post </a>
+  <h1>
+    comment
+    
+  </h1>
+  <hr>
+  <ol>
+    {% for comment in post.postcomment.all %}
+    
+    <li>
+      
+      {{ comment.body }} :by <span style="color:aquamarine">{{ user.username }}</span> <br>
+    </li>
+    {% endfor %}
+    
+    <hr>
+    
+   
+
+  </ol>
+  {% else %}
+      <h1>
+        Siz ruyxatdan utmagansiz:
+        <a href="{% url 'login' %}">LOGIN </a> or
+        <a href="{% url 'register' %}">SIGNUP</a>
+      </h1>
+  
+  {% endif %}  {% endcomment %}
+ 
+  <div class="main-content-wrapper section-padding-100" style="background-image: url(static/img/blog-img/bg2.jpg);">
+    <div class="container" style="background-image: url(static/img/blog-img/bg2.jpg);">
+        <div class="row justify-content-center" style="background-image: url(static/img/blog-img/bg2.jpg);">
+            <!-- ============= Post Content Area Start ============= -->
+            <div class="col-12 col-lg-8" style="background-image: url(static/img/blog-img/bg2.jpg);">
+                <div class="post-content-area mb-100">
+                    <!-- Catagory Area -->
+                    <div class="world-catagory-area">
+                      
+                     {% if user.is_auth 
+                        <div class="tab-content" id="myTabContent" style="background-image: url(static/img/blog-img/bg2.jpg);">
+
+                            <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1" style="background-image: url(static/img/blog-img/bg2.jpg);">
+                                <!-- Single Blog Post -->
+                                <div class="single-blog-post post-style-4 d-flex align-items-center">
+                                    <!-- Post Thumbnail -->
+                                    <div class="post-thumbnail">
+                                        <img src="{{ post.ImageUrl }}" alt="">
+                                    </div>
+                                    <!-- Post Content -->
+                                    <div class="post-content">
+                                        <a href="#" class="headline">
+                                            <h5>{{ post.title }}</h5>
+                                        </a>
+                                        <p>{{ post.body }}</p>
+                                          <p><a href="{% url 'reaction' post.id 'like' %}">21 §  {{ post.like }}</a></p>
+                                          <a href="{% url 'reaction' post.id 'dislike' %}"><i class="bi bi-hand-thumbs-down"></i>{{ post.dislike }}</a><p></p> 
+                                        <!-- Post Meta -->
+                                        <div class="post-meta">
+                                            <p><a href="#" class="post-author">{{ post.author }}</a> on <a href="#" class="post-date">{{ post.update_date }} am</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                       
+                            </div>
+
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+  
+            
+        </div>
+
+
+        
+    </div>
+</div> 
+ <a href="{% url 'update' post.id %}"> update post </a> <br>
+  
+  <a href="{% url 'delete' post.id %}"> delete post </a>
+    {% else %}
+      <h1>
+        Siz ruyxatdan utmagansiz:
+        <a href="{% url 'login' %}">LOGIN </a> or
+        <a href="{% url 'register' %}">SIGNUP</a>
+      </h1>
+  
+  {% endif %} 
+
+
+{% endblock content %}
+  
+  
+
+
+  
+
