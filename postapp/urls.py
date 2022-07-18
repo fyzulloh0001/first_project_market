@@ -1,17 +1,18 @@
 from unicodedata import category
 from django.urls import path
-from .views import createview, deleteview, detailview, home,category,reaction, logoutview, registerview, regular,singleblog,contact,loginview, updateview
+from .views import  createview, deleteview, detailview, home,category,reaction, logoutview, registerview, regular,singleblog,contact,loginview, updateview
 
 urlpatterns = [
     path('',home,name='home'),
     path('category/',category,name='category'),
     path('singleblog/',singleblog,name='singleblog'),
-    path('regular/',regular,name='regular'),
-    path('contact/',contact,name='contact'),
+    path('contact/',regular,name='contact'),
+    
     path('detail/<int:id>/',detailview,name='detail'),
 # ___________________________________________________________
     path('login/',loginview,name='login'),
     path('logout/',logoutview,name='logout'),
+    # path('createcontact/',createcontact,name='createcontact'),
     path('register/',registerview,name='register'),
     path('create/',createview,name='create'),
     path('update/<int:id>/',updateview,name='update'),

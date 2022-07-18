@@ -1,10 +1,11 @@
 import random
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from postapp.forms import LikesForm, PostForm,CommentForm
-from .models import Category, Like, Post
+from postapp.forms import LikesForm, PostForm,CommentForm, Register_ModelForm
+from .models import Category, Like, MemberThink, Post
 from django.contrib.auth import login,logout,authenticate
-from .models import Register_Model
+from .models import Register_Model, Comment,Register_Model
 # Create your views here.
 
 
@@ -52,15 +53,28 @@ def singleblog(request):
     return render(request=request,template_name='category/singleblog.html')
 
 def regular(request):
-    return render(request=request,template_name='category/regular.html')
 
+    return render(request=request,template_name='category/regular.html')
+  
+    # return HttpResponse('Siz login yoki create admin qilmagansiz  ')
+# def createcontact(request):
+#     form=AboutAdminForm()
+#     if request.method=='POST':
+#         form=AboutAdminForm(request.POST,request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('contact')
+#     else:
+#         form=AboutAdminForm()
+    return render(request=request,template_name='account/aboutadmin.html',context={'form':form})
 def contact(request):
     return render(request=request,template_name='category/contact.html')
 
 def detailview(request,id):
+    
     post=Post.objects.get(id=id)
-  
-  
+    comments=post.postcomment.all().order_by('-create_date')
+    
     if request.method=='POST':
         form=CommentForm(request.POST)
         if form.is_valid():
@@ -70,14 +84,54 @@ def detailview(request,id):
             return redirect('.')
     else:
         form=CommentForm()
-            
+   
+   
+    comment_form=CommentForm()
 
+    if request.method=='POST':
+        thought=request.POST.get('thought')
+        think_id=request.POST.get('think')
+        object_com = Comment.objects.get(id=think_id)
+        
+   
+        model=MemberThink.objects.create(
+            body=thought,
+            comment=object_com
+            )
+        model.save()
+   
+    if request.method=='POST':
+    
+        comment=request.POST.get('comment') 
+        comment_form=CommentForm(comment)
+        if comment_form.is_valid():
+            comment_form.save()
+            return redirect('detail',id)
+    else:
+            comment_form=CommentForm()
+   
+    
+   
+        
+    context={
+            'post':post,
+            'form':form,
+            'comment_form':comment_form,
+            'comments':comments,
+            
+            
+            
+            }
+    return render(request=request,template_name='detail.html',
+                context=context)
+        
+    
  
-    context={'post':post,
-               'form':form,
-              
-                }
-    return render(request=request,template_name='detail.html',context=context)
+            
+        
+        
+        
+        
 
 def reaction(request,id,react):
     post=Post.objects.get(id=id)
@@ -90,9 +144,6 @@ def reaction(request,id,react):
     return redirect('detail',id)
        
 # ___________________________________________
-
-
-
 
 def loginview(request):
     pass_user=''
@@ -114,25 +165,24 @@ def logoutview(request):
     return redirect('login')
 
 def registerview(request):
-    password_error=''
-    user=Register_Model()
+    
+    model=Register_Model
+    form=Register_ModelForm()
     if request.method=='POST':
-        username=request.POST.get('username')
-        email=request.POST.get('email')
-        password=request.POST.get('password')
-        password1=request.POST.get('password1')
-
-        if password == password1:
-            user=Register_Model.objects.create(username=username,email=email,password=password)
-            user.set_password(password)
-            user.save()
+        form=Register_ModelForm(request.POST)
+      
+        password_error=''
+        if form.is_valid():
+            # user=Register_Model.objects.create(username=username,email=email,password=password)
+            form.set_password()
+            form.save()
             return redirect('login')
         else:
             password_error='you inter password it is deffirent'
     else:
-        Register_Model()
+        form=Register_ModelForm()
 
-    return render(request=request,template_name='account/register.html',context={'password_error':password_error})
+    return render(request=request,template_name='account/register.html',context={'form':form})
 
 def createview(request):
 
@@ -171,6 +221,7 @@ def deleteview(request,id):
     return redirect('home')
 
 def likesview(request):
+
     if request.method=='POST':
         form=LikesForm(request.POST)
         if form.is_valid():
@@ -181,10 +232,3 @@ def likesview(request):
       
     context={'form':form}
     return render(request=request,template_name='home.html',context=context)
-
-
-# ____________________________________________
-# def homecategory(request):
-#     category=Category.objects.all()
-#     context={'category':category}
-#     return render(request=request,template_name='homecategory.html',context=context)

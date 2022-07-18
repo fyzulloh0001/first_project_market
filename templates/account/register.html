@@ -10,11 +10,14 @@
     <form method="post">
 
         {% csrf_token %}
-        <input type="text" name="username" placeholder="usernmame">
+        <!-- <input type="text" name="username" placeholder="usernmame">
         <input type="email" name="email" placeholder="email">
         <input type="password" name="password" placeholder='password'>
 
         <input type="password" name="password1" placeholder='password'>
+    
+         -->
+        {{ form.as_p }}
         <button type="submit">save </button>
   
     </form>

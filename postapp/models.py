@@ -7,9 +7,34 @@ class Register_Model(AbstractUser):
     username=models.CharField(max_length=100,unique=True)
     email=models.EmailField()
     password=models.CharField(max_length=20)
-
+    
+    image=models.ImageField(upload_to='admin_image',null=True,blank=True)
+    age=models.IntegerField(null=True,blank=True)
+    country=models.CharField(max_length=20,null=True,blank=True)
+    phone_number=models.CharField(max_length=20,null=True,blank=True)
+    job=models.CharField(max_length=30,null=True,blank=True)
+    body=models.CharField(max_length=200,null=True,blank=True)
+    unevirsite=models.CharField(max_length=50,null=True,blank=True)
     def __str__(self):
-        return self.username
+        return self.first_name
+
+# class AboutAdmin(models.Model):
+#     first_name=models.ForeignKey(Register_Model,on_delete=models.SET_NULL,null=True,related_name='firstnames')
+#     last_name=models.ForeignKey(Register_Model,on_delete=models.SET_NULL,null=True,related_name='lastnames')
+#     email=models.ForeignKey(Register_Model,on_delete=models.SET_NULL,null=True,related_name='emails')
+
+#     image=models.ImageField(upload_to='admin_image')
+#     age=models.IntegerField(null=True,blank=True)
+#     country=models.CharField(max_length=20)
+#     phone_number=models.CharField(max_length=20)
+#     job=models.CharField(max_length=30)
+#     body=models.CharField(max_length=200)
+#     unevirsite=models.CharField(max_length=50)
+
+#     def __str__(self):
+#         return self.job
+
+
     
 
 
@@ -80,15 +105,20 @@ class Like(models.Model):
 class Comment(models.Model):
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name='postcomment',null=True,blank=True)
     author=models.ForeignKey(Register_Model,on_delete=models.CASCADE,related_name='authorcomment',null=True,blank=True)
-    parent_com=models.ForeignKey(Post,on_delete=models.CASCADE,related_name='parentcomment',null=True,blank=True)
+    create_date=models.DateTimeField(auto_now=True)
+
     body=models.TextField()
 
     def __str__(self):
-        return f"{self.author}s comment for {self.body}"
+        return self.body
 
+class  MemberThink(models.Model):
+    comment=models.ForeignKey(Comment,on_delete=models.CASCADE,related_name='memberthinks',null=True,blank=True)
+    create_date=models.DateTimeField(auto_now=True)
+    body=models.TextField(null=True,blank=True)
 
-        
-
+    def __str__(self):
+        return self.body
 
 
 
